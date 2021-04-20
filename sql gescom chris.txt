@@ -1,0 +1,153 @@
+DROP DATABASE IF EXISTS gescom_Chris;
+
+CREATE DATABASE gescom_Chris;
+
+USE gescom_Chris;
+
+DROP TABLE IF EXISTS Supplier;
+CREATE TABLE Supplier(
+   sup_id INT AUTO_INCREMENT,
+   sup_name VARCHAR(50) NOT NULL,
+   sup_adress VARCHAR(50) NOT NULL,
+   sup_zipCode INT NOT NULL,
+   sup_city VARCHAR(30),
+   sup_country VARCHAR(30),
+   sup_telephone VARCHAR(20) NOT NULL,
+   sup_contactTitle VARCHAR(50),
+   PRIMARY KEY(sup_id)
+)ENGINE = INNODB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS Client;
+CREATE TABLE Client(
+   cli_id INT AUTO_INCREMENT,
+   cli_name VARCHAR(50) NOT NULL,
+   cli_firstname VARCHAR(30) NOT NULL,
+   cli_adress VARCHAR(50) NOT NULL,
+   cli_zipCode INT NOT NULL,
+   cli_city VARCHAR(30) NOT NULL,
+   cli_country VARCHAR(50) NOT NULL,
+   cli_password VARCHAR(50) NOT NULL,
+   cli_telephone VARCHAR(20) NOT NULL,
+   cli_mail VARCHAR(50) NOT NULL,
+   cli_add DATE NOT NULL,
+   cli_update DATE NOT NULL,
+   PRIMARY KEY(cli_id),
+   UNIQUE(cli_password),
+   UNIQUE(cli_mail)
+)ENGINE = INNODB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS Business;
+CREATE TABLE Business(
+   Bus_ID INT AUTO_INCREMENT,
+   Bus_companyName VARCHAR(30) NOT NULL,
+   Bus_contactName VARCHAR(30) NOT NULL,
+   Bus_contatTitle VARCHAR(50) NOT NULL,
+   Bus_country VARCHAR(30) NOT NULL,
+   Bus_telephone VARCHAR(20) NOT NULL,
+   Bus_Adress VARCHAR(80) NOT NULL,
+   Bus_city VARCHAR(30) NOT NULL,
+   Bus_region VARCHAR(30) NOT NULL,
+   Bus_zipCode INT NOT NULL,
+   PRIMARY KEY(Bus_ID),
+   UNIQUE(Bus_telephone)
+)ENGINE = INNODB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS Order_;
+CREATE TABLE Order_(
+   ord_id INT AUTO_INCREMENT,
+   ord_shipAdress VARCHAR(80) NOT NULL,
+   ord_shipCity VARCHAR(30) NOT NULL,
+   ord_shipName VARCHAR(30) NOT NULL,
+   ord_shipZipcode INT NOT NULL,
+   ord_shipRegion VARCHAR(50) NOT NULL,
+   ord_shipVia INT NOT NULL,
+   ord_discountInPourcent DECIMAL(2,2),
+   ord_date DATETIME NOT NULL,
+   ord_paiementMethod VARCHAR(50) NOT NULL,
+   ord_shippedDate DATETIME NOT NULL,
+   ord_dateReceipt DATETIME NOT NULL,
+   ord_orderReceipt VARCHAR(50),
+   cli_id INT NOT NULL,
+   PRIMARY KEY(ord_id),
+   FOREIGN KEY(cli_id) REFERENCES Client(cli_id)
+)ENGINE = INNODB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS Employee;
+CREATE TABLE Employee(
+   emp_id INT AUTO_INCREMENT,
+   emp_name VARCHAR(30) NOT NULL,
+   emp_firstname VARCHAR(50) NOT NULL,
+   emp_dateOfBirth DATE NOT NULL,
+   emp_hie_id INT,
+   emp_gender VARCHAR(50) NOT NULL,
+   emp_position VARCHAR(50) NOT NULL,
+   emp_grossSalary DECIMAL(10,4) NOT NULL,
+   emp_childNbre INT,
+   emp_yearsOfService DECIMAL(3,2) NOT NULL,
+   emp_department VARCHAR(50) NOT NULL,
+   emp_shop VARCHAR(50) NOT NULL,
+   emp_shop_adress VARCHAR(50),
+   empl_shop_Zipcode INT,
+   emp_shop_city VARCHAR(50),
+   Bus_ID INT NOT NULL,
+   PRIMARY KEY(emp_id),
+   FOREIGN KEY(Bus_ID) REFERENCES Business(Bus_ID)
+)ENGINE = INNODB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS Sub_category;
+CREATE TABLE Sub_category(
+   sub_id INT AUTO_INCREMENT,
+   sub_name VARCHAR(50) NOT NULL,
+   PRIMARY KEY(sub_id)
+)ENGINE = INNODB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS Hierarchy;
+CREATE TABLE Hierarchy(
+   hie_id INT AUTO_INCREMENT,
+   hie_name VARCHAR(50) NOT NULL,
+   emp_id INT,
+   PRIMARY KEY(hie_id),
+   FOREIGN KEY(emp_id) REFERENCES Employee(emp_id)
+)ENGINE = INNODB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS Product;
+CREATE TABLE Product(
+   pro_id INT AUTO_INCREMENT,
+   pro_label VARCHAR(30) NOT NULL,
+   pro_coulour VARCHAR(30),
+   pro_categorie_id INT NOT NULL,
+   pro_categorie VARCHAR(50) NOT NULL,
+   pro_EAN INT NOT NULL,
+   pro_unitPriceHT DECIMAL(15,4) NOT NULL,
+   pro_StockAlert INT NOT NULL,
+   pro_dateAdd DATETIME NOT NULL,
+   pro_dateUpdate DATETIME NOT NULL,
+   pro_picture BINARY(50),
+   pro_block BINARY NOT NULL,
+   pro_CurrentStock INT NOT NULL,
+   pro_description VARCHAR(255),
+   sub_id INT NOT NULL,
+   sup_id INT NOT NULL,
+   Bus_ID INT,
+   PRIMARY KEY(pro_id),
+   UNIQUE(pro_EAN),
+   FOREIGN KEY(sub_id) REFERENCES Sub_category(sub_id),
+   FOREIGN KEY(sup_id) REFERENCES Supplier(sup_id),
+   FOREIGN KEY(Bus_ID) REFERENCES Business(Bus_ID)
+)ENGINE = INNODB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS order_details;
+CREATE TABLE order_details(
+   pro_id INT,
+   ord_id INT,
+   order_det_quantity INT NOT NULL,
+   order_det_discount DECIMAL(2,2),
+   order_details_unitPrice DECIMAL(10,4) NOT NULL,
+   ord_detail_id INT NOT NULL,
+   PRIMARY KEY(pro_id, ord_id),
+   UNIQUE(ord_detail_id),
+   FOREIGN KEY(pro_id) REFERENCES Product(pro_id),
+   FOREIGN KEY(ord_id) REFERENCES Order_(ord_id)
+)ENGINE = INNODB DEFAULT CHARSET=utf8;
