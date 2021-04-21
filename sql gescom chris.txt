@@ -110,7 +110,12 @@ CREATE TABLE Position_hierarchy(
    PRIMARY KEY(pos_id)
 )ENGINE = INNODB DEFAULT CHARSET=utf8;
 
-Insert into à copier .............
+INSERT INTO `position_hierarchy` (`pos_id`, `pos_post`) VALUES
+(1, 'Headmaster'),
+(2, 'Assistant director'),
+(3, 'Manager'),
+(4, 'Sells-man');
+
 
 DROP TABLE IF EXISTS Employee;
 CREATE TABLE Employee(
