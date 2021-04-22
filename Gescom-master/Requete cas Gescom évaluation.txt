@@ -1,0 +1,11 @@
+1. SELECT CONCAT(emp_lastname,'',emp_firstname) , emp_children FROM employees
+WHERE emp_children > 1
+ORDER BY emp_children DESC
+
+2.SELECT cus_lastname, cus_firstname, cus_countries_id FROM customers
+WHERE cus_countries_id != 'FR'
+
+3.SELECT  cus_city, cus_countries_id, cou_id FROM customers
+LEFT JOIN countries on customers.cus_id = countries.cou_id
+ORDER by cus_city ASC
+LIMIT 5
