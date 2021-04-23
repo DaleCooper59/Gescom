@@ -5,7 +5,30 @@ ORDER BY emp_children DESC
 2.SELECT cus_lastname, cus_firstname, cus_countries_id FROM customers
 WHERE cus_countries_id != 'FR'
 
-3.SELECT  cus_city, cus_countries_id, cou_id FROM customers
+  (3)  .SELECT  cus_city, cus_countries_id, cou_id FROM customers
 LEFT JOIN countries on customers.cus_id = countries.cou_id
 ORDER by cus_city ASC
 LIMIT 5
+
+4.SELECT  cus_lastname, cus_update_date FROM customers
+WHERE cus_update_date = IS NOT NULL
+
+5.SELECT * FROM customers
+WHERE cus_city  LIKE '%divos%'
+
+6.SELECT pro_id, pro_name, MIN(pro_price) FROM products
+
+7.SELECT pro_id, pro_ref, pro_name
+FROM products
+WHERE pro_id NOT IN 
+         (SELECT ode_pro_id FROM orders_details)
+
+  (8)  .SELECT pro_id, pro_ref, pro_name, cus_id, ord_id, ode_id FROM products
+RIGHT JOIN orders_details ON orders_details.ode_id = products.pro_id
+RIGHT JOIN orders ON orders.ord_id = orders_details.ode_id
+RIGHT JOIN customers ON customers.cus_id = orders.ord_id
+WHERE cus_lastname = 'Pikatchien'
+
+9.SELECT cat_id, cat_name, pro_name FROM products
+JOIN categories ON products.pro_cat_id = categories.cat_id
+ORDER BY cat_name ASC
