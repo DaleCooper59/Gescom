@@ -1,0 +1,7 @@
+CREATE USER 'gescom_marketing'@'localhost' IDENTIFIED BY 'marketing2021'
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON `afpa_gescom`.productsTO 'gescom_marketing'@'localhost' 
+GRANT SELECT, INSERT, UPDATE, DELETE ON  `afpa_gescom`.categories TO 'gescom_marketing'@'localhost'
+GRANT SELECT ON afpa_gescom.orders TO 'gescom_marketing'@'localhost' 
+GRANT SELECT ON afpa_gescom.orders_details TO 'gescom_marketing'@'localhost' 
+GRANT SELECT ON afpa_gescom.customers TO 'gescom_marketing'@'localhost'
