@@ -1,0 +1,9 @@
+CREATE USER 'util1'@'localhost' IDENTIFIED BY 'user1mdp';
+CREATE USER 'util2'@'localhost' IDENTIFIED BY 'user2mdp';
+CREATE USER 'util3'@'localhost' IDENTIFIED BY 'user3mdp';
+
+GRANT ALL PRIVILEGES ON afpa_gescom.* TO 'util1'@'localhost' WITH GRANT OPTION;
+
+GRANT SELECT ON afpa_gescom.* TO 'util2'@'localhost';
+
+GRANT SELECT ON afpa_gescom.suppliers;
