@@ -1,0 +1,55 @@
+					HOTEL
+
+1.liste hotel avec leur staion associée
+CREATE VIEW v_hotel_station
+AS 
+SELECT hot_nom,sta_nom FROM hotel
+JOIN station ON hotel.hot_sta_id = station.sta_id
+
+
+2.Afficher la liste des chambres et leur hôtel
+CREATE VIEW v_hotel_chambre
+AS 
+SELECT hot_nom,cha_capacite FROM hotel
+JOIN chambre ON hotel.hot_id = chambre.cha_hot_id
+GROUP BY hot_nom
+
+3.Afficher la liste des réservations avec le nom des clients
+CREATE VIEW v_client_reservation
+AS 
+SELECT CONCAT(cli_nom,' ', cli_prenom) AS 'identité',reservation.* FROM client
+JOIN reservation ON client.cli_id = reservation.res_cli_id
+GROUP BY cli_nom
+ORDER by res_date_debut ASC
+
+4.Afficher la liste des chambres avec le nom de l'hôtel et le nom de la station
+CREATE VIEW v_cha_hot_sta
+AS 
+SELECT cha_numero,hot_nom, sta_nom FROM chambre
+JOIN hotel ON chambre.cha_hot_id = hotel.hot_id
+JOIN station ON hotel.hot_sta_id = station.sta_id
+GROUP BY cha_numero
+
+5.Afficher les réservations avec le nom du client et le nom de l'hôtel
+CREATE VIEW v_res_cli_hot
+AS 
+SELECT v_client_reservation.*,hot_nom
+FROM hotel
+INNER JOIN v_client_reservation ON hotel.hot_id = v_client_reservation.res_cli_id;
+
+					GESCOM
+
+1.
+CREATE VIEW v_Details
+AS 
+SELECT pro_ref, SUM(ode_quantity) AS QteTot, SUM(ode_quantity)*ode_unit_price AS PrixTot FROM orders_details
+JOIN products ON orders_details.ode_pro_id = products.pro_id
+GROUP BY ode_pro_id
+
+2.(Pas de vente ? res vide)
+CREATE VIEW v_Ventes_Zoom
+AS
+SELECT pro_ref,orders_details.* FROM orders_details
+JOIN products ON orders_details.ode_pro_id = products.pro_id
+WHERE pro_ref ='ZOOM'
+GROUP BY pro_ref
