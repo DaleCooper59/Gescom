@@ -1,0 +1,64 @@
+1. 
+DELIMITER $$
+CREATE PROCEDURE Lst_Suppliers()
+BEGIN
+SELECT sup_name FROM suppliers 
+    JOIN products p ON suppliers.sup_id=p.pro_sup_id
+    JOIN orders_details od ON p.pro_id=od.ode_pro_id
+    JOIN orders o ON od.ode_ord_id=o.ord_id
+    WHERE sup_id IN 
+    (SELECT ode_id FROM orders_details)
+    GROUP BY sup_name;
+END $$
+DELIMITER ;
+
+CALL Lst_Suppliers
+
+SHOW CREATE PROCEDURE Lst_Suppliers;
+
+
+2.
+DROP PROCEDURE IF EXISTS Lst_Rush_Orders;
+DELIMITER $$
+CREATE PROCEDURE Lst_Rush_Orders(IN p_ord_status VARCHAR(255))
+BEGIN
+SELECT * FROM orders
+WHERE ord_status = p_ord_status;
+END $$
+DELIMITER ;
+
+CALL Lst_Rush_Orders('Commande urgente')
+
+
+3.
+DELIMITER $$
+CREATE PROCEDURE CA_Supplier(
+    p_CA_date VARCHAR(50), 
+    OUT p_CAyear VARCHAR(50)
+   )
+BEGIN
+SELECT sup_name, SUM(ode_quantity*ode_unit_price) AS CA FROM suppliers
+    JOIN products p ON suppliers.sup_id=p.pro_sup_id
+    JOIN orders_details od ON p.pro_id=od.ode_pro_id
+    JOIN orders o ON od.ode_ord_id=o.ord_id
+    WHERE YEAR(ord_order_date) = 1997
+    GROUP BY sup_name;
+END $$
+DELIMITER ;
+
+             POSSIBLE :
+DELIMITER $$
+CREATE PROCEDURE CA_Supplier(
+    p_CA_date VARCHAR(50), 
+    OUT p_CAyear VARCHAR(50)
+   )
+BEGIN
+SELECT sup_name, SUM(ode_quantity*ode_unit_price) INTO p_sup_name, p_totalCA
+FROM suppliers
+    JOIN products p ON suppliers.sup_id=p.pro_sup_id
+    JOIN orders_details od ON p.pro_id=od.ode_pro_id
+    JOIN orders o ON od.ode_ord_id=o.ord_id
+    WHERE YEAR(ord_order_date) = p_CAyear
+    GROUP BY sup_name;
+END $$
+DELIMITER ;
