@@ -1,0 +1,23 @@
+1.
+CREATE VIEW v_products
+AS
+SELECT pro_id,pro_ref,pro_name,cat_id,cat_name FROM products
+JOIN categories ON products.pro_cat_id = categories.cat_id
+ORDER by pro_name ASC
+
+2. 
+DELIMITER $$
+CREATE PROCEDURE facture (
+	p_ord_id INT,
+	OUT p_ode_id INT,
+	OUT p_unit_price INT,
+	OUT p_discount INT,
+	OUT p_quantity INT,
+	OUT p_total_order INT)
+BEGIN
+	SELECT ord_id, ode_id, ode_unit_price, ode_discount, SUM(ode_quantity), SUM(ode_unit_price-(ode_discount*ode_unit_price/100) INTO p_ord_id, p_ode_id, p_unit_price, p_discount, p_quantity, p_total_order FROM orders
+	JOIN orders_details ON orders.ord_id = orders_details.ode_ord_id
+	WHERE orders.ord_id = p_ord_id
+	GROUP BY ord_id
+END $$
+DELIMITER ;

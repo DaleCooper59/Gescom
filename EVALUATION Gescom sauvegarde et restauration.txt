@@ -1,0 +1,10 @@
+SAUVEGARDE
+1. Création dossier Backup dans C:\
+2. C:path to mysql bin soit => cd C:\wamp64\bin\mysql\mysql5.7.31\bin
+3. mysqldump --user=root --password= --databases gescom_afpa > C:\Backup\backup_gescom_afpa.sql
+le backup est donc stocké dans le dossier Bacup créé à la racine/
+
+RESTAURATION
+1. C:path to mysql bin soit => cd C:\wamp64\bin\mysql\mysql5.7.31\bin
+2. mysqldump --user=root --password= --databases gescom_afpa > C:\Backup\backup_gescom_afpa.sql
+3. mysql --user=root --password= < C:\Backup\backup_gescom_afpa.sql

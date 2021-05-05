@@ -1,0 +1,23 @@
+CREATE TABLE commander_articles (
+    com_art_codart INT AUTO_INCREMENT,
+    com_art_quantite INT NOT NULL,
+    com_art_dateDAY TIMESTAMP NOT NULL,
+    PRIMARY KEY(com_art_codart)
+)ENGINE = INNODB DEFAULT CHARSET=utf8;
+
+
+ALTER TABLE products ADD COLUMN pro_isAlert INT DEFAULT (0);
+
+
+DELIMITER ||
+CREATE TRIGGER after_products_update AFTER UPDATE
+ON products FOR EACH ROW
+BEGIN
+
+ 	IF NEW.pro_stock <= NEW.pro_stock_alert 
+	 	THEN 
+        	INSERT INTO commander_articles(com_art_quantite,com_art_dateDAY)VALUES (NEW.pro_stock - NEW.pro_stock_alert,CURRENT_TIMESTAMP)
+    END IF;
+ 
+END ||
+DELIMITER ;
