@@ -16,7 +16,7 @@ BEGIN
 
  	IF NEW.pro_stock <= NEW.pro_stock_alert 
 	 	THEN 
-        	INSERT INTO commander_articles(com_art_quantite,com_art_dateDAY)VALUES (NEW.pro_stock - NEW.pro_stock_alert,CURRENT_TIMESTAMP)
+        	INSERT INTO commander_articles(com_art_quantite,com_art_dateDAY)VALUES (NEW.pro_stock - NEW.pro_stock_alert,CURRENT_TIMESTAMP);
     END IF;
  
 END ||
