@@ -42,9 +42,25 @@ END ||
 DELIMITER ;
 
 4.
+SET AUTOCOMMIT=0;
+
+INSERT INTO posts (pos_libelle) VALUES (retirement); 
+
 START TRANSACTION;
-UPDATE employees SET emp_pos_id = 2
+UPDATE employees SET emp_pos_id = 2, emp_salary = emp_salary *1,05
 JOIN posts on posts.pos_id = employees.emp_pos_id
 WHERE pos_libelle LIKE '%Pépiniériste%'
 ORDER BY emp_enter_date ASC LIMIT 1;
 COMMIT;
+
+
+
+DELIMITER $$
+CREATE TRIGGER after_update_posts AFTER UPDATE 
+ON posts FOR EACH ROW
+BEGIN
+	UPDATE posts SET pos_libelle = 'retirement'
+	
+	 
+END $$
+DELIMITER ;
