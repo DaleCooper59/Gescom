@@ -6,6 +6,8 @@ JOIN categories ON products.pro_cat_id = categories.cat_id
 ORDER by pro_name ASC
 
 2. 
+DROP PROCEDURE IF EXISTS facture;
+
 DELIMITER $$
 CREATE PROCEDURE facture (
 	p_ord_id INT,
@@ -15,9 +17,34 @@ CREATE PROCEDURE facture (
 	OUT p_quantity INT,
 	OUT p_total_order INT)
 BEGIN
-	SELECT ord_id, ode_id, ode_unit_price, ode_discount, SUM(ode_quantity), SUM(ode_unit_price-(ode_discount*ode_unit_price/100) INTO p_ord_id, p_ode_id, p_unit_price, p_discount, p_quantity, p_total_order FROM orders
+	SELECT  ode_id, ode_unit_price, ode_discount, SUM(ode_quantity), ode_quantity*(SUM(ode_unit_price)*SUM(1-ode_discount/100)) INTO p_ode_id, p_unit_price, p_discount, p_quantity, p_total_order FROM orders
 	JOIN orders_details ON orders.ord_id = orders_details.ode_ord_id
 	WHERE orders.ord_id = p_ord_id
-	GROUP BY ord_id
+	GROUP BY ord_id;
 END $$
 DELIMITER ;
+
+CALL facture(12, @idOde, @unitPrice, @discount, @quantity, @totalAmount);
+SELECT @idOde as 'idOrderDetail', @unitPrice as 'unitPrice', @discount as 'discount', @quantity as 'quantityTotal', @totalAmount as 'total';
+
+3.
+DELIMITER ||
+CREATE TRIGGER after_products_update AFTER UPDATE
+ON products FOR EACH ROW
+BEGIN
+
+ 	IF NEW.pro_stock <= NEW.pro_stock_alert 
+	 	THEN 
+        	INSERT INTO commander_articles(com_art_quantite,com_art_dateDAY)VALUES (NEW.pro_stock - NEW.pro_stock_alert,CURRENT_TIMESTAMP);
+    END IF;
+ 
+END ||
+DELIMITER ;
+
+4.
+START TRANSACTION;
+UPDATE employees SET emp_pos_id = 2
+JOIN posts on posts.pos_id = employees.emp_pos_id
+WHERE pos_libelle LIKE '%Pépiniériste%'
+ORDER BY emp_enter_date ASC LIMIT 1;
+COMMIT;

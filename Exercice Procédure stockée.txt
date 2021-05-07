@@ -1,3 +1,8 @@
+
+0.
+SET @v_ville:='rennes';
+CALL `ajoutFournisseur`('bla', 'an', '12 ruue', 59250, 'dskjhvuq', '05118418', 'djkhrvfuegd')
+
 1. 
 DELIMITER $$
 CREATE PROCEDURE Lst_Suppliers()
@@ -31,22 +36,32 @@ CALL Lst_Rush_Orders('Commande urgente')
 
 
 3.
+DROP PROCEDURE IF EXISTS CA_Supplier;
 DELIMITER $$
 CREATE PROCEDURE CA_Supplier(
+    p_sup_id INT,
     p_CA_date VARCHAR(50), 
     OUT p_CAyear VARCHAR(50)
    )
 BEGIN
+
+IF ISNULL(p_sup_id)THEN
+SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Le client existe déjà';
+
+ELSE
 SELECT sup_name, SUM(ode_quantity*ode_unit_price) AS CA FROM suppliers
     JOIN products p ON suppliers.sup_id=p.pro_sup_id
     JOIN orders_details od ON p.pro_id=od.ode_pro_id
     JOIN orders o ON od.ode_ord_id=o.ord_id
-    WHERE YEAR(ord_order_date) = 1997
+    WHERE YEAR(ord_order_date) = p_CA_date
     GROUP BY sup_name;
+END IF;
 END $$
 DELIMITER ;
 
              POSSIBLE :
+
+DROP PROCEDURE IF EXISTS CA_Supplier;
 DELIMITER $$
 CREATE PROCEDURE CA_Supplier(
     p_CA_date VARCHAR(50), 
