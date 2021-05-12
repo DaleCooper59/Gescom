@@ -49,7 +49,7 @@ INSERT INTO client (cli_id, cli_name, cli_firstname, cli_adress, cli_zipCode, cl
  (1, 'Cooper', 'Dale', 'Grand Northern Hotel', 1234, 'Washington', 'United State', 'T9P[L%L.6#<#tjWJJfZE', '55589764', 'dale@gmail.com', '2021-03-18 07:15:25', CURRENT_TIME),
  (2, 'Mister', 'Hyde', '1 plais de son âme', 59000, 'Lille', 'France', 'PQ!r~^64$%p/GAY$mA)B', '0645896235', 'MhM@gmail.com', '2021-03-26 07:15:25', CURRENT_TIME),
  (3, 'Mollier', 'Mari', '16 avenu du bonheur', 59250, 'Halluin', 'France', 'P_/E~F&Um%#7:ZkTYd2<P', '0659474712', 'mollier@outlook.fr', '2021-04-06 12:12:35', CURRENT_TIME),
- (4, 'Jean', 'Michel', '25 rue abbe delbende', 59510, 'Forest sur marque', 'France', '*+G/,e]!Mkq,n3@:=j&V', '07458129536', 'monsieurmichel@laposte.net', '2021-03-30 07:26:12', CURRENT_TIME)
+ (4, 'Jean', 'Michel', '25 rue abbe delbende', 59510, 'Forest sur marque', 'France', '*+G/,e]!Mkq,n3@:=j&V', '07458129536', 'monsieurmichel@laposte.net', '2021-03-30 07:26:12', CURRENT_TIME);
 
 DROP TABLE IF EXISTS Business;
 CREATE TABLE Business(
@@ -131,7 +131,7 @@ CREATE TABLE Employee(
    emp_department VARCHAR(50) NOT NULL,
    Bus_ID INT NOT NULL,
    PRIMARY KEY(emp_id),
-   FOREIGN KEY(Bus_ID) REFERENCES Business(Bus_ID)
+   FOREIGN KEY(Bus_ID) REFERENCES Business(Bus_ID),
    FOREIGN KEY(emp_pos_id) REFERENCES Position_hierarchy(pos_id)
 )ENGINE = INNODB DEFAULT CHARSET=utf8;
 
