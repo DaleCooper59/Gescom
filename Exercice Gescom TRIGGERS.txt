@@ -21,3 +21,6 @@ BEGIN
  
 END ||
 DELIMITER ;
+
+UPDATE `products` SET `pro_stock` = '6' WHERE `products`.`pro_id` = 8; 
+Modifier Unsigned pour stock et stock alert pour accpeter chiffre négatifs
